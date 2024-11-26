@@ -1,0 +1,136 @@
+/* Full-Screen Layout */
+.full-screen-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    background-color: #fffefd;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+  }
+
+  .header {
+    background-color: #216583;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #eee6e6;
+    margin: 10px 0;
+    font-size: 2.5vw;
+  }
+  
+  .dropdown-section {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-size: 1.5vw;
+    margin-right: 1vw;
+    color: #eee6e6
+  }
+  
+  select {
+    padding: 10px 15px;
+    font-size: 1.5vw;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 10vw;
+  }
+
+  .action-buttons {
+    text-align: right;
+    box-sizing: border-box;
+    background: #f9fcff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Full-Screen Card */
+  .full-screen-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 1vw;
+    gap: 1vw;
+    box-sizing: border-box;
+    background: #f9fcff;
+    border-top: 2px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  }
+  
+  .full-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: 50vw;
+    height: 33vw;
+    border-radius: 2vw;
+  }
+  
+  .full-details {
+    flex: 1;
+    padding: 1.5vw;
+    
+  }
+
+  
+  .full-details h2 {
+    font-size: 4vw;
+    color: #216583;
+    margin-bottom: 3vw;
+    text-align: center;
+  }
+
+
+  
+  .full-details span {
+    font-size: 3vw;
+    
+}
+
+  .full-details p {
+    font-size: 2.5vw;
+    margin: 1.5vw 0;
+    color: rgb(125, 131, 71);
+    display: grid;
+    grid-template-columns: 20vw 1fr; /* Fixed width for labels and flexible for content */
+    gap: 1vw;
+    margin: 1vw 0;
+  }
+  
+  strong {
+    color:  #216583;
+  }
+
+
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .full-screen-card {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.5vw;
+    }
+  
+    .full-image {
+      max-width: 90%;
+      max-height: 50%;
+    }
+  
+    .full-details {
+      padding: 1vw;
+    }
+  
+    .full-details h2 {
+      font-size: 2.5vw;
+    }
+  
+    .full-details p {
+      font-size: 2vw;
+    }
+  }
+  
