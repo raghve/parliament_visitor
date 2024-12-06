@@ -1,0 +1,7 @@
+{
+    "apiUrl": "http://localhost:3000",     
+    "deviceID": ["None", "D001", "D002", "D003", "D004"],
+    "appTitle": "MP_Attendance",
+    "dashboardTitle": "Hon'ble Member of Parliament Attendance Dashboard"
+
+}

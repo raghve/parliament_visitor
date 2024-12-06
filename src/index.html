@@ -2,12 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>VisitorDisplay</title>
+  <title>MP Dashboard</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <!-- Add this in the <head> tag of your index.html -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<!-- In your src/index.html, add this script tag to load Google Transliteration API -->
+<script type="text/javascript" src="https://www.google.com/inputtools/request?text=abc"></script>
+
+<script src="https://www.google.com/jsapi" async defer></script>
+<script>
+  google.load("elements", "1", {packages: ["transliteration"]});
+  google.setOnLoadCallback(function() {
+    var options = {
+      sourceLanguage:
+          google.elements.transliteration.LanguageCode.ENGLISH,
+      destinationLanguage:
+          [google.elements.transliteration.LanguageCode.HINDI],
+      shortcutKey: 'ctrl+g'
+    };
+    var control = new google.elements.transliteration.TransliterationControl(options);
+    control.makeTransliteratable(['transliterateMe']);
+    console.log("Transliteration API loaded successfully.");
+  });
+</script>
+
 
 </head>
 <body>

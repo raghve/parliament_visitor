@@ -1,6 +1,6 @@
 /* Full-Screen Layout */
 .full-screen-container {
-    height: 100vh;
+    /* height: 100vh; */
     display: flex;
     flex-direction: column;
     font-family: Arial, sans-serif;
@@ -13,6 +13,27 @@
 
   .header {
     background-color: #216583;
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space elements evenly: logo, title, dropdown */
+    padding: 10px 20px; /* Add some padding */
+    border-bottom: 1px solid #ddd; /* Optional: Add a subtle bottom border */
+  }
+
+  .logo img {
+    width: 50px; /* Adjust logo size */
+    height: auto;
+    /* background-image: url('../assets/images/ashokStambh.png'); */
+    /* background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; */
+  }
+  
+  .title {
+    text-align: center;
+    flex-grow: 1; /* Allow the title to expand in the middle */
+    font-size: 1.5em;
+    font-weight: bold;
   }
   
   h1 {
@@ -24,21 +45,25 @@
   
   .dropdown-section {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 0.85em;
   }
   
   label {
-    font-size: 1.5vw;
-    margin-right: 1vw;
+    font-size: 0.85em;
+    margin-right: 1opx;
     color: #eee6e6
   }
   
   select {
-    padding: 10px 15px;
-    font-size: 1.5vw;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    min-width: 10vw;
+    padding: 3px 8px; /* Make the dropdown smaller */
+    font-size: 0.85em; /* Adjust dropdown text size */
+    height: auto; /* Ensure dropdown height adapts */
+    border: 1px solid #ccc; /* Optional: Customize border */
+    border-radius: 4px; /* Slight rounding for modern look */
+
   }
 
   .action-buttons {
@@ -50,41 +75,74 @@
   
   /* Full-Screen Card */
   .full-screen-card {
+   
+    width: 90vw;
+    height: auto;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    padding: 1vw;
-    gap: 1vw;
+    justify-content: space-between; /* Positions images and details on opposite sides */
+    align-items: flex-start; /* Aligns items to the top */
+    gap: 2vw; /* Creates space between the images and the details */
     box-sizing: border-box;
-    background: #f9fcff;
-    border-top: 2px solid #ddd;
+    padding: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 3vw 5vw;
+    background-image: linear-gradient(rgba(227, 239, 248, 0.8), rgba(227, 239, 248, 0.8)),url('../assets/images/parliament-new-building-85.jpg'); /* Update with your actual image name */
+    background-size: cover; /* Ensures the image covers the entire container */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    border-radius: 3vw;
 
+
+  }
+
+  .background-container {
+    
+      width: 100%;
+      height: 100vh; /* Adjust this to fit the desired container height */
+      background-color: rgb(243, 243, 235);
+
+    
+  }
+
+  .visitor-title {
+    color: blue; /* Blue font color for visitors */
+  }
+  
+  .vendor-title {
+    color: darkgreen; /* Dark green font color for vendors */
+  }
+  
+  .image-container {
+    display: flex;
+    flex-direction: column; /* Stacks the images vertically */
+    gap: 1vw; /* Adds space between the images */
+    align-items: center; /* Centers the images horizontally */
+    margin-left: 30px;
   }
   
   .full-image {
-    max-width: 100%;
-    max-height: 100%;
-    width: 50vw;
-    height: 33vw;
+    width: 30vw;
+    height: 25vw;
+    border-radius: 2vw;
+    display: block;
+  }
+  
+  .signature-image {
+    width: 30vw;
+    height: 8vw;
+    object-fit: fill; /* Ensures the image fits proportionally */
+    display: block;
     border-radius: 2vw;
   }
   
   .full-details {
     flex: 1;
-    padding: 1.5vw;
-    
-  }
+    /* padding: 1vw;
+    display: flex; */
+    flex-direction: column;
+    justify-content: flex-start; /* Aligns the details to the top */
 
-  
-  .full-details h2 {
-    font-size: 4vw;
-    color: #216583;
-    margin-bottom: 3vw;
-    text-align: center;
   }
-
 
   
   .full-details span {
@@ -95,15 +153,42 @@
   .full-details p {
     font-size: 2.5vw;
     margin: 1.5vw 0;
-    color: rgb(125, 131, 71);
+    color:  rgb(80, 155, 5);
     display: grid;
     grid-template-columns: 20vw 1fr; /* Fixed width for labels and flexible for content */
     gap: 1vw;
     margin: 1vw 0;
+   
+  }
+  .full-details h4 {
+    font-size: 1.5rem;
+    color: rgb(80, 155, 5);
   }
   
   strong {
     color:  #216583;
+  }
+
+  .marked_punch {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adds spacing between the icon and text */
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+
+
+  }
+  
+  .marked_punch img {
+    width: 40px; /* Adjust size as needed */
+    height: 40px;
+  }
+  
+  .marked_punch h4 {
+    margin: 0;
+    font-size: 1.5rem; /* Adjust font size as needed */
+    color:rgb(80, 155, 5) ;
   }
 
 
@@ -133,4 +218,8 @@
       font-size: 2vw;
     }
   }
-  
+
+
+
+
+

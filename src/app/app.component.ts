@@ -2,56 +2,109 @@ import { Component, OnInit } from '@angular/core';
 import { FileWatcherService } from './file-watcher.service';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+
+import { interval, Subscription } from 'rxjs';
+import { TransliterationPipe } from './transliteration.pipe';
+import { GoogleTransliterationPipe } from './google-transliteration.pipe';
+
+
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,CommonModule],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    FormsModule,
+    TransliterationPipe,
+    GoogleTransliterationPipe
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  title = 'visitor_Display';
-  deviceIds = ['None', 'D001', 'D002', 'D003', 'D004']; // Example Device IDs
+  Ram = "Shri Ram";
+  title = '';
+  apiUrl = '';
+  dashboardTitle= '';
+  deviceIds = ''; // Example Device IDs
   latestImageData: any;
   selectedDevice:any;
-
   isFullscreen = false;
   isCancelled = false;
+  showDropdown:boolean = true;
+
+  private fetchIntervalSubscription: Subscription | null = null;
   
 
-  constructor(private fileWatcherService: FileWatcherService) {}
+  constructor(
+    private fileWatcherService: FileWatcherService, 
+    private http: HttpClient
+  ) { }
 
-  ngOnInit(): void {}
+
+  ngOnInit(): void {
+    // Fetch the config.json file from the assets folder
+    this.http.get<any>('/assets/frontendConfig.json').subscribe(config => {
+      this.apiUrl = config.apiUrl;
+      this.fileWatcherService.initialize(this.apiUrl); // Initialize the service
+      this.deviceIds = config.deviceID;
+      this.title = config.appTitle;
+      this.dashboardTitle = config.dashboardTitle;
+    });
+
+  }
+
+  toggleDropdown() {
+   this.showDropdown = !this.showDropdown;
+  }
 
   onDeviceSelect(event: any): void {
     const selectedDevice = (event.target as HTMLSelectElement).value;
     this.selectedDevice = selectedDevice;
     console.log('Selected Device:', selectedDevice);
-    const deviceId = event.target.value;
 
-    // Get the latest image when the device is selected
+    // Clear any existing interval subscription
+    if (this.fetchIntervalSubscription) {
+      this.fetchIntervalSubscription.unsubscribe();
+    }
+
+    // Start fetching data every 2 seconds for the selected device
+    if (selectedDevice !== 'None') {
+      this.fetchLatestImage(selectedDevice);
+      // this.fetchIntervalSubscription = interval(2000).subscribe(() => {
+      //   this.fetchLatestImage(selectedDevice);
+      // });
+    }
+  }
+
+  fetchLatestImage(deviceId: string): void {
     this.fileWatcherService.getLatestImage(deviceId).subscribe(
       (data) => {
         this.latestImageData = data;
-        // console.log('UI DATA',data);
+        console.log('UI DATA:', data);
       },
       (error) => {
         console.error('Error fetching image:', error);
       }
     );
 
-    // Listen for real-time updates when a new file is added
+    //Listein for Real Time Updates
     this.fileWatcherService.onFileAdded((data) => {
-      // console.log('New file added UI:', data);
-      // Only update the UI if the image belongs to the selected device
-      
-      if (data.deviceId === this.selectedDevice) {
+      if (data.deviceID === this.selectedDevice) {
         this.latestImageData = data;
-        // console.log('UI updated with new file data:', data);
       }
-      
     });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from the interval to prevent memory leaks
+    if (this.fetchIntervalSubscription) {
+      this.fetchIntervalSubscription.unsubscribe();
+    }
   }
 
   enterFullscreen(): void {
@@ -71,10 +124,11 @@ export class AppComponent implements OnInit {
   cancelFullscreen(): void {
     this.isFullscreen = false;
     this.isCancelled = true;
+    this.latestImageData= '';
+    this.selectedDevice = 'None';
     if (document.fullscreenElement) {
       document.exitFullscreen();
-    }
-    this.latestImageData= '';
+    };
   }
 
 

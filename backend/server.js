@@ -6,16 +6,19 @@ const cors = require('cors');
 const fs = require('fs');
 const socketIo = require('socket.io');
 
+const backendConfig = require('./backendConfig'); // Import the backend configuration
+
 const app = express();
 const server = http.createServer(app);
 
 
 
-const folderPath = path.join(__dirname, '../src/assets/watched-folder'); // Folder to watch
+const folderPath = backendConfig.folderPath; // Folder to watch
+console.log("FolderPath : ", folderPath);
 
 // Enable CORS for all domains (or specify a specific domain)
 app.use(cors({
-  origin: 'http://localhost:4200', // Allow only the Angular app to access the backend
+  origin: backendConfig.frontendUrl, // Allow only the Angular app to access the backend
   methods: ['GET', 'POST'],
   credentials: true // Enable cookies if needed
 }));
@@ -23,7 +26,7 @@ app.use(cors({
 // Enable CORS
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:4200", // Angular app URL
+    origin: backendConfig.frontendUrl, // Angular app URL
     methods: ["GET", "POST"],
   },
 });
@@ -39,26 +42,34 @@ io.on('connection', (socket) => {
 // Watch the folder for changes
 const watcher = chokidar.watch(folderPath, { persistent: true });
 
-// watcher.on('add', (filePath) => {
-//   console.log(`File added: ${filePath}`);
-//   const latestFileData = parseFilePath(filePath);
-//   console.log('Parsed File Dataon Change:', latestFileData);
-//   io.emit('file-added', filePath); // Notify the frontend
-// });
+//      ---------New Code File Watcher------
 watcher.on('add', (filePath) => {
-  console.log(`File added: ${filePath}`);
+  console.log(`File added1: ${filePath}`);
 
   try {
-    // Extract file details (e.g., enrollId, name, and timestamp)
     const latestFileData = parseFilePath(filePath);
-    console.log('Parsed File Data:', latestFileData);
+    console.log('Parsed File Data1:', latestFileData);
 
-     // Extract deviceId from filePath (modify this logic based on your folder structure)
-     const pathParts = filePath.split(path.sep); // Split the path by separator
-     const deviceId = pathParts[pathParts.length - 3]; // Adjust index based on folder structure
- 
-     console.log('Device ID:', deviceId);
+    // Extract deviceId from filePath (modify logic based on folder structure)
+    const pathParts = filePath.split(path.sep);
+    const deviceId = pathParts[pathParts.length - 3]; // Adjust as needed
 
+    console.log('Device ID:', deviceId);
+    // console.log("Profile Image Path:", backendConfig.profileImagePath);
+    // console.log("Signature Image Path:", backendConfig.profileImagePath);
+
+    // Paths for profile image and signature
+    const profileImagePath = path.join(
+      backendConfig.profileImagePath,
+      `${latestFileData.empId}.jpg`
+    );
+    // console.log("Profile Image Path:", profileImagePath);/////
+    
+    const signatureImagePath = path.join(
+      backendConfig.profileImagePath,
+      `${latestFileData.empId}_sign.jpg`
+    );
+    // console.log("Signature Image Path:", signatureImagePath);
 
     // Read the file and convert to Base64
     fs.readFile(filePath, (err, data) => {
@@ -67,24 +78,47 @@ watcher.on('add', (filePath) => {
         return;
       }
 
-      // Convert the file data to Base64
       const base64Image = `data:image/jpeg;base64,${data.toString('base64')}`;
-      console.log("Emitted FIle:", latestFileData.enrollId, latestFileData.name, latestFileData.timestamp);
 
-      const payload = {
-        deviceId,
-        base64Image,
-        enrollId: latestFileData.enrollId,
-        name: latestFileData.name,
-        timestamp: latestFileData.timestamp
-    };
+    // Read the profile image
+    fs.readFile(profileImagePath, (err, profileImageData) => {
+      if (err) {
+        console.error('Error reading profile image:', err);
+        return;
+      }
 
-    console.log('Emitted Payload:', payload);
-      // Emit the formatted data along with the Base64 image
-      io.emit('file-added', payload);
+      const base64ProfileImage = `data:image/jpeg;base64,${profileImageData.toString('base64')}`;
+
+      // Read the signature image
+      fs.readFile(signatureImagePath, (err, signatureImageData) => {
+        if (err) {
+          console.error('Error reading signature image:', err);
+          return;
+        }
+
+        const base64SignatureImage = `data:image/jpeg;base64,${signatureImageData.toString('base64')}`;
+
+        // Prepare and emit payload
+        const payload = {
+          deviceId,
+          base64Image, // Main image
+          base64ProfileImage, // Profile image
+          base64SignatureImage, // Signature image
+          empId: latestFileData.empId,
+          name: latestFileData.name,
+          companyName: latestFileData.companyName,
+          department: latestFileData.department,
+          expectedOutTime: latestFileData.expectedOutTime,
+          type: latestFileData.type,
+        };
+
+        console.log('Emitted Payload:', payload);
+        io.emit('file-added', payload);
+      });
     });
+  });
   } catch (error) {
-    console.error('Error processing file:', error.message);
+    console.error('Error processing file1:', error.message);
   }
 });
 
@@ -118,10 +152,10 @@ app.get('/get-latest-image/:deviceId', (req, res) => {
       files.sort((a, b) => {
         const parseTimestamp = (fileName) => {
           const parts = fileName.replace('.jpg', '').split('~');
-          if (parts.length !== 3) {
+          if (parts.length !== 6) {
             throw new Error(`Invalid file format: ${fileName}`);
           }
-          const timestamp = parts[2];
+          const timestamp = parts[4];    // Expected Out Time is at 4th part
           if (!/^\d{14}$/.test(timestamp)) {
             throw new Error(`Invalid timestamp: ${timestamp}`);
           }
@@ -140,12 +174,25 @@ app.get('/get-latest-image/:deviceId', (req, res) => {
       console.log("latest data", latestFile);
       const filePath = path.join(deviceFolderPath, latestFile);
       console.log('Filepath', filePath);
+//Name~CompanyName~Department~ExpectedOuttime~type
+     let [empId, name, companyName, department, expectedOutTime, type] = latestFile.replace('.jpg', '').split('~');
 
-     let [enrollId, name, timestamp] = latestFile.replace('.jpg', '').split('~');
-
-     enrollId = enrollId;
+     empId = empId;
      name = formatName(name);
-     timestamp = formatTimestamp(timestamp);
+     companyName = formatName(companyName);
+     department = department;
+     expectedOutTime = formatTimestamp(expectedOutTime);
+     type = type;
+
+    // Profile image and signature paths
+        const profileImagePath = path.join(
+          backendConfig.profileImagePath,
+          `${empId}.jpg`
+        );
+        const signatureImagePath = path.join(
+          backendConfig.profileImagePath,
+          `${empId}_sign.jpg`
+        );  
 
   // Read the image file and convert it to base64
      fs.readFile(filePath, (err, data) => {
@@ -156,15 +203,39 @@ app.get('/get-latest-image/:deviceId', (req, res) => {
 
      const base64Image = data.toString('base64');
 
-    // Send the image in base64 format along with the details
-     res.json({
-      base64Image: `data:image/jpeg;base64,${base64Image}`, // Sending the base64 encoded image
-      enrollId,
-      name,
-      timestamp,
-     });
-  });
+      // Read the profile image
+      fs.readFile(profileImagePath, (err, profileImageData) => {
+        if (err) {
+          console.error('Error reading profile image file:', err);
+          return res.status(500).send('Error reading profile image file.');
+        }
 
+        const base64ProfileImage = `data:image/jpeg;base64,${profileImageData.toString('base64')}`;
+
+        // Read the signature image
+        fs.readFile(signatureImagePath, (err, signatureImageData) => {
+          if (err) {
+            console.error('Error reading signature image file:', err);
+            return res.status(500).send('Error reading signature image file.');
+          }
+
+          const base64SignatureImage = `data:image/jpeg;base64,${signatureImageData.toString('base64')}`;
+
+          // Send the response
+          res.json({
+            base64Image,
+            base64ProfileImage,
+            base64SignatureImage,
+            empId,
+            name,
+            companyName,
+            department,
+            expectedOutTime,
+            type,
+          });
+        });
+      });
+    });
     } catch (error) {
       console.error('Error processing files:', error.message);
       return res.status(500).send('Error processing files.');
@@ -179,11 +250,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/file-watcher-app/index.html'));
 });
 
-// Start the server
-const PORT = 3000;
-server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+
 
 
 // Function to format name (add space between first and last name)
@@ -209,11 +276,26 @@ function formatTimestamp(timestamp) {
 }
 
 function parseFilePath(filePath) {
-  const fileName = path.basename(filePath);
-  const [enrollId, name, timestamp] = fileName.replace('.jpg', '').split('~');
+  const fileName = path.basename(filePath, '.jpg'); // Extract the file name without the extension
+  const [empId, name, companyName, department, expectedOutTime, type] = fileName.split('~'); // Split by `~`
+
+  if (!empId || !name || !companyName || !department || !expectedOutTime || !type) {
+    throw new Error(`Invalid file name format: ${fileName}`);
+  }
+
   return {
-    enrollId,
+    empId,
     name: formatName(name),
-    timestamp: formatTimestamp(timestamp),
+    companyName: formatName(companyName),
+    department,
+    expectedOutTime: formatTimestamp(expectedOutTime), // Format expectedOutTime
+    type,
   };
 }
+
+// Start the server
+const PORT = backendConfig.port;
+const HOST = backendConfig.host;
+server.listen(PORT, HOST, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});

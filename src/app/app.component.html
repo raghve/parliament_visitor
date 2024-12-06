@@ -1,10 +1,19 @@
 <div class="full-screen-container">
   <!-- Header -->
   <div class="header" *ngIf="!isFullscreen || isCancelled">
-    <h1>Visitor Dashboard</h1>
+
+    <!-- Logo Section -->
+    <div class="logo">
+      <img src="../assets/images/ashokStambh.png"  (dblclick)="toggleDropdown()"/>
+    </div>
+
+    <!-- Title Section -->
+    <div class="title">
+      <h1>{{dashboardTitle}}</h1>
+    </div>
 
     <!-- Dropdown Section -->
-    <div class="dropdown-section">
+    <div class="dropdown-section" *ngIf="this.showDropdown">
       <label for="deviceId">Select Device ID:</label>
       <select id="deviceId" (change)="onDeviceSelect($event)">
         <option *ngFor="let device of deviceIds" [value]="device">{{ device }}</option>
@@ -12,10 +21,12 @@
     </div>
   </div>
 
- 
+</div>
 
 
  <!-- Image Card -->
+
+  <div class="background-container">
 
     <!-- Action Buttons -->
     <div class="action-buttons" *ngIf="latestImageData">
@@ -31,15 +42,36 @@
     </div>
     <!-- Action Buttons -->
 
-  <div *ngIf="latestImageData" class="full-screen-card" [class.fullscreen]="isFullscreen && !isCancelled">
-    <img [src]="latestImageData.base64Image" alt="Latest Image" class="full-image" />
-    <div class="full-details">
-      <h2>Latest Visitor Details</h2>
-      <p><strong>Visitor Name:</strong> <span>{{ latestImageData.name }}</span></p>
-      <p><strong>Visitor ID:</strong> <span>{{ latestImageData.enrollId }}</span></p>
-      <p><strong>IN Time:</strong> <span>{{ latestImageData.timestamp }}</span></p>
+    <div *ngIf="latestImageData" class="full-screen-card" [class.fullscreen]="isFullscreen && !isCancelled">
+      <div class="image-container">
+        <!-- First Image (main image) -->
+        <img [src]="latestImageData.base64ProfileImage" alt="Latest Image" class="full-image" />
+        
+        <!-- Second Image (signature image) -->
+        <img [src]="latestImageData.base64SignatureImage" alt="Signature Image" class="signature-image" />
+      </div>
+     <div class="full-details">
+      <span class="marked_punch"> 
+        <span class="marked_punch"> 
+          <span class="icon-container">
+            <img src="https://img.icons8.com/?size=100&id=YZHzhN7pF7Dw&format=png&color=000000" alt="Approval Icon" />
+          </span>
+          <h4 class="text">Your Attendance has been marked.</h4>
+        </span>
+      </span>
+
+        <!-- <h2 [ngClass]="{'visitor-title': latestImageData.type == 0, 'vendor-title': latestImageData.type == 1}">
+        {{ latestImageData.type ==S 0 ? 'Latest Visitor Details' : 'Latest Vendor Details' }}
+        </h2> -->
+        <!-- <p><strong>Emp ID:</strong> <span>{{ latestImageData.empId }}</span></p> <hr> -->
+        <p><strong>Name:</strong> <span>{{ latestImageData.name }} <br>  {{ latestImageData.name | googleTransliterate | async }}</span></p><hr>
+        <p><strong>Constituenty:</strong> <span>{{ latestImageData.companyName }} <br> </span></p><hr>
+        <p><strong>Department:</strong> <span>{{ latestImageData.department }} <br> </span></p><hr>
+        <p><strong>IN Time:</strong> <span>{{ latestImageData.expectedOutTime }}</span></p>
+        <!-- <p><strong>Type:</strong> <span>{{ latestImageData.type }}</span></p> -->
+     </div>
     </div>
+  </div>
 
     
-  </div>
-</div>
+
