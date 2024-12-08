@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
+import { fromEvent, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +17,7 @@ export class FileWatcherService {
       this.apiUrl = apiUrl;
       this.socket = io(this.apiUrl); // Initialize socket with the API URL
     }
+
 
   // Get the latest image and its data for the selected Device ID
   getLatestImage(deviceId: string): Observable<any> {

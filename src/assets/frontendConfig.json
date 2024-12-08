@@ -2,6 +2,8 @@
     "apiUrl": "http://localhost:3000",     
     "deviceID": ["None", "D001", "D002", "D003", "D004"],
     "appTitle": "MP_Attendance",
-    "dashboardTitle": "Hon'ble Member of Parliament Attendance Dashboard"
+    "dashboardTitle": "Hon'ble Member of Parliament Attendance Dashboard",
+    "brandImagePath": "./assets/images/ashokStambh.png",
+    "backgroundImagePath": "./assets/images/parliament-new-building-85.jpg"
 
 }

@@ -30,6 +30,8 @@ export class AppComponent implements OnInit {
   title = '';
   apiUrl = '';
   dashboardTitle= '';
+  brandImagePath= '';
+  backgroundImagePath= '';
   deviceIds = ''; // Example Device IDs
   latestImageData: any;
   selectedDevice:any;
@@ -54,7 +56,11 @@ export class AppComponent implements OnInit {
       this.deviceIds = config.deviceID;
       this.title = config.appTitle;
       this.dashboardTitle = config.dashboardTitle;
+      this.brandImagePath = config.brandImagePath;
+      this.backgroundImagePath = config.backgroundImagePath;
     });
+
+   
 
   }
 
@@ -74,10 +80,10 @@ export class AppComponent implements OnInit {
 
     // Start fetching data every 2 seconds for the selected device
     if (selectedDevice !== 'None') {
-      this.fetchLatestImage(selectedDevice);
-      // this.fetchIntervalSubscription = interval(2000).subscribe(() => {
-      //   this.fetchLatestImage(selectedDevice);
-      // });
+      // this.fetchLatestImage(selectedDevice);
+      this.fetchIntervalSubscription = interval(3000).subscribe(() => {
+        this.fetchLatestImage(selectedDevice);
+      });
     }
   }
 
@@ -94,7 +100,8 @@ export class AppComponent implements OnInit {
 
     //Listein for Real Time Updates
     this.fileWatcherService.onFileAdded((data) => {
-      if (data.deviceID === this.selectedDevice) {
+      // console.log("---------------Device Popped:--------------", data.deviceId)
+      if (data.deviceId === this.selectedDevice) {
         this.latestImageData = data;
       }
     });

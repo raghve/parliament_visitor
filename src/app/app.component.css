@@ -21,12 +21,8 @@
   }
 
   .logo img {
-    width: 50px; /* Adjust logo size */
+    width: 40px; /* Adjust logo size */
     height: auto;
-    /* background-image: url('../assets/images/ashokStambh.png'); */
-    /* background-size: cover; 
-    background-position: center; 
-    background-repeat: no-repeat; */
   }
   
   .title {
@@ -66,160 +62,236 @@
 
   }
 
+  .body-container {
+    height: 90vh;
+    /* background-image: linear-gradient(rgba(227, 239, 248, 0.8), rgba(227, 239, 248, 0.8)),url('../assets/images/parliament-new-building-85.jpg');  */
+    background-size: cover; /* Ensures the image covers the entire container */
+    /* background-position: center;  */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+  }
+
   .action-buttons {
     text-align: right;
     box-sizing: border-box;
-    background: #f9fcff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Full-Screen Card */
-  .full-screen-card {
-   
-    width: 90vw;
-    height: auto;
-    display: flex;
-    justify-content: space-between; /* Positions images and details on opposite sides */
-    align-items: flex-start; /* Aligns items to the top */
-    gap: 2vw; /* Creates space between the images and the details */
-    box-sizing: border-box;
-    padding: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 3vw 5vw;
-    background-image: linear-gradient(rgba(227, 239, 248, 0.8), rgba(227, 239, 248, 0.8)),url('../assets/images/parliament-new-building-85.jpg'); /* Update with your actual image name */
-    background-size: cover; /* Ensures the image covers the entire container */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    border-radius: 3vw;
-
-
   }
 
   .background-container {
-    
-      width: 100%;
-      height: 100vh; /* Adjust this to fit the desired container height */
-      background-color: rgb(243, 243, 235);
-
-    
-  }
-
-  .visitor-title {
-    color: blue; /* Blue font color for visitors */
-  }
-  
-  .vendor-title {
-    color: darkgreen; /* Dark green font color for vendors */
-  }
-  
-  .image-container {
     display: flex;
-    flex-direction: column; /* Stacks the images vertically */
-    gap: 1vw; /* Adds space between the images */
-    align-items: center; /* Centers the images horizontally */
-    margin-left: 30px;
-  }
+    justify-content: center;
+    width: 100%;
+    height: auto; /* Adjust this to fit the desired container height */
+}
   
-  .full-image {
-    width: 30vw;
-    height: 25vw;
-    border-radius: 2vw;
-    display: block;
-  }
-  
-  .signature-image {
-    width: 30vw;
-    height: 8vw;
-    object-fit: fill; /* Ensures the image fits proportionally */
-    display: block;
-    border-radius: 2vw;
-  }
-  
-  .full-details {
-    flex: 1;
-    /* padding: 1vw;
-    display: flex; */
-    flex-direction: column;
-    justify-content: flex-start; /* Aligns the details to the top */
-
-  }
-
-  
-  .full-details span {
-    font-size: 3vw;
+  /* Full-Screen Card */
+  .full-screen-card {
+    display: flex;
+    justify-content: space-between; /* Positions images and details on opposite sides */
+    align-items: flex-start; /* Aligns items to the top */
     
+  }
+
+/* New Code */
+
+/* Attendance Card */
+.attendance-card {
+  width: 90vw;
+  height: auto;
+  background-color: transparent;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 20px;
 }
 
-  .full-details p {
-    font-size: 2.5vw;
-    margin: 1.5vw 0;
-    color:  rgb(80, 155, 5);
-    display: grid;
-    grid-template-columns: 20vw 1fr; /* Fixed width for labels and flexible for content */
-    gap: 1vw;
-    margin: 1vw 0;
-   
+/* Success Message */
+.attendance-message {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.attendance-message .checkmark {
+  margin-right: 15px;
+}
+
+.attendance-message .checkmark img {
+  width:8vw;
+}
+
+.attendance-message .message-text h1 {
+  font-size: 2.5vw;
+  gap: 5px;;
+  margin: 0;
+  color: green;
+}
+
+
+/* Member Details */
+.member-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.left-column {
+  width: 70vw;
+  flex: 1;
+  
+}
+
+.left-column p {
+  margin: 10px 0;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color:  #216583;
+  display: grid;
+  grid-template-columns: 15vw 1fr; 
+}
+
+strong {
+  font-weight: 500;
+}
+
+/* Profile Image */
+.right-column {
+  width: 40vw;
+  text-align: center;
+}
+
+.full-image {
+  width: 30vw;
+  height: 25vw;
+  border-radius: 10px;
+}
+
+.member-name {
+  margin-top: 15px;
+}
+
+.member-name h3 {
+  font-size: 2.5rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+.member-name h4 {
+  font-size: 2.3rem;
+  margin: 0;
+  color: #555;
+}
+
+.member-name p {
+  margin: 0;
+  font-size: 2rem;
+  color: #555;
+}
+
+/* Mobile devices (portrait and small landscape) */
+@media (max-width: 767px) {
+  .main-content {
+    flex-direction: column;
+    padding: 0 10px; /* Add padding for small screens */
   }
-  .full-details h4 {
+
+  .attendance-card {
+    width: 100%; /* Ensure the card takes up full width */
+    padding: 10px; /* Reduce padding for mobile */
+  }
+
+  .body-container {
+    background-position: center; /* Ensure background image is centered */
+    background-size: cover; /* Scale background image to cover */
+  }
+
+  .member-details {
+    flex-direction: column; /* Stack the member details vertically */
+    align-items: center; /* Center align the items */
+  }
+
+  .left-column {
+    width: 100%; /* Make left column take up full width */
+    margin-bottom: 10px; /* Reduce margin for small screens */
+  }
+
+  .left-column p {
+    font-size: 1.5rem; /* Adjust font size for mobile */
+    grid-template-columns: 30vw 1fr; /* Stack the grid columns */
+  }
+
+  .full-image {
+    width: 80vw; /* Make the image smaller on mobile */
+    height: 60vw; /* Maintain aspect ratio for the image */
+  }
+
+  .right-column {
+    width: 100%; /* Make right column take up full width */
+  }
+
+  .attendance-message .message-text h1 {
+    font-size: 1rem;
+  }
+  
+
+  .member-name h3 {
+    font-size: 2rem;
+  }
+  
+  .member-name h4 {
+    font-size: 2rem;
+  }
+  
+  .member-name p {
     font-size: 1.5rem;
-    color: rgb(80, 155, 5);
   }
-  
-  strong {
-    color:  #216583;
+}
+
+/* Tablet and small laptops (portrait and landscape) */
+@media (min-width: 768px) and (max-width: 1280px) {
+  .main-content {
+    flex-direction: column;
+    padding: 0 10px;
   }
 
-  .marked_punch {
-    display: flex;
+  .attendance-card {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .body-container {
+    background-position: center;  
+  }
+
+  .member-details {
+    flex-direction: column;
     align-items: center;
-    gap: 10px; /* Adds spacing between the icon and text */
-    text-align: center;
-    align-content: center;
-    justify-content: center;
-
-
-  }
-  
-  .marked_punch img {
-    width: 40px; /* Adjust size as needed */
-    height: 40px;
-  }
-  
-  .marked_punch h4 {
-    margin: 0;
-    font-size: 1.5rem; /* Adjust font size as needed */
-    color:rgb(80, 155, 5) ;
   }
 
 
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .full-screen-card {
-      flex-direction: column;
-      text-align: center;
-      gap: 1.5vw;
-    }
-  
-    .full-image {
-      max-width: 90%;
-      max-height: 50%;
-    }
-  
-    .full-details {
-      padding: 1vw;
-    }
-  
-    .full-details h2 {
-      font-size: 2.5vw;
-    }
-  
-    .full-details p {
-      font-size: 2vw;
-    }
+  .left-column {
+    width: 100%;
+    margin-bottom: 20px;
   }
 
+  .left-column p {
+    font-size: 2.5rem;
+    grid-template-columns: 30vw 1fr;
+  }
 
+  .full-image {
+    width: 50vw;
+    height: 40vw;
+  }
+
+  .right-column {
+    width: 100%;
+  }
+
+  .attendance-message .message-text h1 {
+    font-size: 2rem;
+  }
+}
 
 
 

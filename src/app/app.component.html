@@ -4,7 +4,7 @@
 
     <!-- Logo Section -->
     <div class="logo">
-      <img src="../assets/images/ashokStambh.png"  (dblclick)="toggleDropdown()"/>
+      <img [src]="brandImagePath" alt="Brand Logo"  (dblclick)="toggleDropdown()"/>
     </div>
 
     <!-- Title Section -->
@@ -24,54 +24,106 @@
 </div>
 
 
+
+
  <!-- Image Card -->
+  <div class="body-container" [style.background-image]="'linear-gradient(rgba(227, 239, 248, 0.8), rgba(227, 239, 248, 0.8)), url(' + backgroundImagePath + ') '">
 
-  <div class="background-container">
+              <!-- Action Buttons -->
+          <div class="action-buttons" *ngIf="latestImageData">
+            <button (click)="enterFullscreen()" *ngIf="!isFullscreen" class="icon-button">
+              <i class="fas fa-expand"></i> <!-- Full Screen Icon -->
+            </button>
+            <button (click)="exitFullscreen()" *ngIf="isFullscreen && !isCancelled" class="icon-button">
+              <i class="fas fa-compress"></i> <!-- Minimize Icon -->
+            </button>
+            <button (click)="cancelFullscreen()" class="icon-button">
+              <i class="fas fa-times"></i> <!-- Cancel Icon -->
+            </button>
+          </div>
+          <!-- Action Buttons -->
 
-    <!-- Action Buttons -->
-    <div class="action-buttons" *ngIf="latestImageData">
-      <button (click)="enterFullscreen()" *ngIf="!isFullscreen" class="icon-button">
-        <i class="fas fa-expand"></i> <!-- Full Screen Icon -->
-      </button>
-      <button (click)="exitFullscreen()" *ngIf="isFullscreen && !isCancelled" class="icon-button">
-        <i class="fas fa-compress"></i> <!-- Minimize Icon -->
-      </button>
-      <button (click)="cancelFullscreen()" class="icon-button">
-        <i class="fas fa-times"></i> <!-- Cancel Icon -->
-      </button>
-    </div>
-    <!-- Action Buttons -->
+    <div class="background-container">
 
-    <div *ngIf="latestImageData" class="full-screen-card" [class.fullscreen]="isFullscreen && !isCancelled">
-      <div class="image-container">
-        <!-- First Image (main image) -->
-        <img [src]="latestImageData.base64ProfileImage" alt="Latest Image" class="full-image" />
+      <div *ngIf="latestImageData" class="full-screen-card" [class.fullscreen]="isFullscreen && !isCancelled">
+        <div class="attendance-card">
+          
+  
+          <div class="member-details">
+            <div class="left-column">
+
+              <div class="attendance-message">
+                <div class="message-text" *ngIf="latestImageData.punchExist == 0">
+                  <h1>Your Attendance has been Marked.</h1>
+                  <h1>आपकी उपस्थिति दर्ज हो गई है।</h1>
+                </div>
+                <div class="message-text" *ngIf="latestImageData.punchExist == 1">
+                  <h1>Attendance already Marked.</h1>
+                  <h1>उपस्थिति पहले ही दर्ज हो चुकी है।</h1>
+                </div>
+                <div class="checkmark">
+                  <img src="https://img.icons8.com/?size=100&id=YZHzhN7pF7Dw&format=png&color=000000" alt="Approval Icon"  />
+                </div>
+              </div>
+
+              <p><strong>Session:</strong> Winter (25.11.2024-20.12.2024)</p> <hr>
+              <p><strong>Party:</strong> {{latestImageData.party}}</p> <hr>
+              <p><strong>IC No:</strong> {{latestImageData.icCode}}</p> <hr>
+              <p><strong>MP Code:</strong> {{latestImageData.empId}}</p> <hr>
+              <p><strong>IN Time:</strong> {{latestImageData.expectedOutTime}}</p>
+            </div>
+  
+            <div class="right-column">
+              <div *ngIf="latestImageData.type == 1">
+                <!-- Type 1: Profile and Signature Images -->
+                <img [src]="latestImageData.base64ProfileImage" alt="Profile Image" class="full-image" />
+                <!-- <img [src]="latestImageData.base64SignatureImage" alt="Signature Image" class="signature-image" /> -->
+              </div>
+              
+              <div *ngIf="latestImageData.type != 1">
+                <!-- Type 0 or Other: Latest Image and No Signature -->
+                <img [src]="latestImageData.base64Image" alt="Latest Image" class="full-image" /> <hr>
+                <!-- <img [src]="" alt="No Signature Found" class="signature-image" /> -->
+              </div>
+  
+              <div class="member-name">
+                <h3>{{latestImageData.name}}</h3>
+                <h4>{{latestImageData.name2}}</h4>
+                <p>{{latestImageData.branch}}</p>
+                <p>{{latestImageData.branch2}}</p>
+              </div>
+            </div>
+          </div>
         
-        <!-- Second Image (signature image) -->
-        <img [src]="latestImageData.base64SignatureImage" alt="Signature Image" class="signature-image" />
+        </div>
+        <!-- <div class="image-container">
+          <div *ngIf="latestImageData.type == 1">
+            <img [src]="latestImageData.base64ProfileImage" alt="Profile Image" class="full-image" />
+            <img [src]="latestImageData.base64SignatureImage" alt="Signature Image" class="signature-image" />
+          </div>
+          
+          <div *ngIf="latestImageData.type != 1">
+            <img [src]="latestImageData.base64Image" alt="Latest Image" class="full-image" />
+            <img [src]="" alt="No Signature Found" class="signature-image" />
+          </div>
+        </div> -->
+        
+        
+       <!-- <div class="full-details">
+  
+          <p><strong>Emp ID:</strong> <span>{{ latestImageData.empId }}</span></p> <hr>
+          <p><strong>Name:</strong> <span>{{ latestImageData.name }} <br>  {{ latestImageData.name2 }}</span></p><hr>
+          <p><strong>Constituenty:</strong> <span>{{ latestImageData.branch }} <br> {{ latestImageData.branch2 }}</span></p><hr>
+          <p><strong>IC-MP ID:</strong> <span>{{ latestImageData.empId }} || {{latestImageData.deviceCode}} <br> </span></p><hr>
+          <p><strong>IN Time:</strong> <span>{{ latestImageData.expectedOutTime }}</span></p>
+          <p><strong>Party:</strong> <span>{{ latestImageData.party }} </span></p><hr>
+          <p><strong>session:</strong> <span>{{ latestImageData.session }} <br> </span></p><hr>
+          <p><strong>Type:</strong> <span>{{ latestImageData.type }}</span></p>
+       </div> -->
       </div>
-     <div class="full-details">
-      <span class="marked_punch"> 
-        <span class="marked_punch"> 
-          <span class="icon-container">
-            <img src="https://img.icons8.com/?size=100&id=YZHzhN7pF7Dw&format=png&color=000000" alt="Approval Icon" />
-          </span>
-          <h4 class="text">Your Attendance has been marked.</h4>
-        </span>
-      </span>
-
-        <!-- <h2 [ngClass]="{'visitor-title': latestImageData.type == 0, 'vendor-title': latestImageData.type == 1}">
-        {{ latestImageData.type ==S 0 ? 'Latest Visitor Details' : 'Latest Vendor Details' }}
-        </h2> -->
-        <!-- <p><strong>Emp ID:</strong> <span>{{ latestImageData.empId }}</span></p> <hr> -->
-        <p><strong>Name:</strong> <span>{{ latestImageData.name }} <br>  {{ latestImageData.name | googleTransliterate | async }}</span></p><hr>
-        <p><strong>Constituenty:</strong> <span>{{ latestImageData.companyName }} <br> </span></p><hr>
-        <p><strong>Department:</strong> <span>{{ latestImageData.department }} <br> </span></p><hr>
-        <p><strong>IN Time:</strong> <span>{{ latestImageData.expectedOutTime }}</span></p>
-        <!-- <p><strong>Type:</strong> <span>{{ latestImageData.type }}</span></p> -->
-     </div>
     </div>
   </div>
+  
 
     
 
